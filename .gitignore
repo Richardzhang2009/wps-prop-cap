@@ -153,7 +153,7 @@
 /write_up/
 /report/
 /src_with_pii/
-
+/output/
 # NOTE:
 # Each active contributor must certify that they will never store PII
 # outside of the directories listed above
