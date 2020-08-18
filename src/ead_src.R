@@ -14,18 +14,24 @@ ead_analysis <- function(dat = mydata_3,
       labs(color = "Fitting Methods") +
       xlab(title) +
       ylab("Prop Capture Rate") +
-      ggtitle(paste('Prop Capture Rate v.s. ',title,sep=''))
+      ggtitle(paste('Prop Capture Rate v.s. ',title,sep='')) +
+      theme(axis.text.x = element_text(angle=90))
   }else{
   q <- ggplot(dat, aes(x=!!var, y=!!response_var, group=!!var)) + 
     geom_point() +  
     xlab(title) +
     ylab("Prop Capture Rate") +
-    ggtitle(paste('Prop Capture Rate v.s. ',var,sep=''))
+    ggtitle(paste('Prop Capture Rate v.s. ',title,sep=''))+
+    theme(axis.text.x = element_text(angle=90))
   }
   tab <- dat %>% 
     group_by(!!var) %>%
     summarise(total_pol = n(),
               prop_avg = round(mean(!!response_var)*100,0))
+  
+  table_f <- tab %>%
+    knitr::kable(format = "html") %>%
+    kableExtra::kable_styling(full_width = F)
   
   g <- ggplot(tab,aes(x = !!var, y = prop_avg*100)) + 
     geom_bar(mapping = aes(x = !!var, y = total_pol), stat = "identity", fill = "tan1", colour="sienna3") +
@@ -38,7 +44,8 @@ ead_analysis <- function(dat = mydata_3,
                                            labels = function(b) { paste0(round(b, 0), "%")})) + 
     theme(
       axis.title.y = element_text(color = "black"),
-      axis.title.y.right = element_text(color = "blue")) +
+      axis.title.y.right = element_text(color = "blue"),
+      axis.text.x = element_text(angle=90)) +
     xlab(title) +
     ggtitle(paste(title," and Mean of Prop Capture",sep=''))
   
@@ -53,14 +60,16 @@ ead_analysis <- function(dat = mydata_3,
     stat_summary(fun=mean, geom="point", shape=20, size=3, color="blue", fill="red") +
     xlab(title) +
     ylab("Prop Capture Rate") +
-    ggtitle(paste('Prop Capture Rate v.s.',title,sep=''))
+    ggtitle(paste('Prop Capture Rate v.s.',title,sep='')) +
+    theme(axis.text.x = element_text(angle=90))
   }else{
     plot_f = g +
       p + geom_boxplot() +
       stat_summary(fun=mean, geom="point", shape=20, size=3, color="blue", fill="red") +
       xlab(title) +
       ylab("Prop Capture Rate") +
-      ggtitle(paste('Prop Capture Rate v.s.',title,sep=''))
+      ggtitle(paste('Prop Capture Rate v.s.',title,sep='')) +
+      theme(axis.text.x = element_text(angle=90))
   }
-  return(list(table=tab, plot_ori = q, plot = plot_f))
+  return(list(table=table_f, plot_ori = q, plot = plot_f))
 }
