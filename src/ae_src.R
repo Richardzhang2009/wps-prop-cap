@@ -34,9 +34,12 @@ ae_analysis <- function(model = train_model_v1,
     }
   
   
+  table_f <- dat_train_sum %>%
+    knitr::kable(format = "html") %>%
+    kableExtra::kable_styling(full_width = F)
   
   
-  print(dat_train_sum)
+  print(table_f)
   if(!whole_ind){
     
     p <- ggplot(dat_train_sum, aes(x=!!var, y=ae*scale, group=!!var)) +
