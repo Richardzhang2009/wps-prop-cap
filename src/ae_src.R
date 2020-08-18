@@ -9,17 +9,33 @@ ae_analysis <- function(model = train_model_v1,
                         whole_ind = 0,
                         ...){
   
-  if(train_ind){dat_train$fit<-fitted(model);data_type = "Train"
-  }else{dat_train$fit<-predict(model,newdata = dat_train, type = "response");data_type = "Test"}
-  dat_train$ae <- dat_train$response/dat_train$fit
+  if(train_ind){
+    dat_train$fit<-fitted(model)
+    data_type = "Train"
+    dat_train$ae <- dat_train$response_model/dat_train$fit
+    dat_train_sum <- dat_train %>%
+      group_by(!!var) %>%
+      summarise(total=n(),
+                actual_mean = mean(response_model),
+                pred_mean = mean(fit),
+                ae_groupwise = round(actual_mean/pred_mean,2),
+                ae = round(mean(ae),2))
+  }else{
+    dat_train$fit<-predict(model,newdata = dat_train, type = "response")
+    data_type = "Test"
+    dat_train$ae <- dat_train$response/dat_train$fit
+    dat_train_sum <- dat_train %>%
+      group_by(!!var) %>%
+      summarise(total=n(),
+                actual_mean = mean(response),
+                pred_mean = mean(fit),
+                ae_groupwise = round(actual_mean/pred_mean,2),
+                ae = round(mean(ae),2))
+    }
   
-  dat_train_sum <- dat_train %>%
-    group_by(!!var) %>%
-    summarise(total=n(),
-              actual_mean = mean(response),
-              pred_mean = mean(fit),
-              ae_groupwise = round(actual_mean/pred_mean,2),
-              ae = round(mean(ae),2))
+  
+  
+  
   print(dat_train_sum)
   if(!whole_ind){
     
