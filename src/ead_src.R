@@ -14,7 +14,7 @@ ead_analysis <- function(dat = mydata_3,
       labs(color = "Fitting Methods") +
       xlab(title) +
       ylab("Prop Capture Rate") +
-      ggtitle(paste('Prop Capture Rate v.s. ',var,sep=''))
+      ggtitle(paste('Prop Capture Rate v.s. ',title,sep=''))
   }else{
   q <- ggplot(dat, aes(x=!!var, y=!!response_var, group=!!var)) + 
     geom_point() +  
