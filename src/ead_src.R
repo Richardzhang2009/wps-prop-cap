@@ -4,6 +4,7 @@ ead_analysis <- function(dat = mydata_3,
                          smooth_ind_ori = 0,
                          smooth_ind = 1,
                          vjust_m=2,
+                         vjust_r=-1,
                          title = "Total Number of Policies Owned",...){
   
   if(smooth_ind_ori){
@@ -37,7 +38,7 @@ ead_analysis <- function(dat = mydata_3,
     geom_bar(mapping = aes(x = !!var, y = total_pol), stat = "identity", fill = "tan1", colour="sienna3") +
     geom_point(size = 1, color = "blue") + 
     geom_line(size = 0.4, color = "blue") +
-    geom_text(aes(label=prop_avg, x=!!var, y=prop_avg*100), colour="blue", vjust = -1)+
+    geom_text(aes(label=prop_avg, x=!!var, y=prop_avg*100), colour="blue", vjust = vjust_r)+
     geom_text(aes(label=total_pol, x=!!var, y=total_pol), colour="black", vjust = vjust_m)+
     scale_y_continuous(name = "Total Number of Policies", 
                        sec.axis = sec_axis(~./100, name = "Mean of Prop (%)",
