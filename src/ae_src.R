@@ -7,10 +7,15 @@ ae_analysis <- function(model = train_model_v1,
                         train_ind = 1,
                         scale = 10000,
                         whole_ind = 0,
+                        sep_ind = 0,
                         ...){
   
   if(train_ind){
+    if(sep_ind){
+    dat_train$fit<-predict(model, newdata = dat_train, type = "response")
+    }else{
     dat_train$fit<-fitted(model)
+    }
     data_type = "Train"
     dat_train$ae <- dat_train$response_model/dat_train$fit
     dat_train_sum <- dat_train %>%
