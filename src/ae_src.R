@@ -23,8 +23,8 @@ ae_analysis <- function(model = train_model_v1,
       summarise(total=n(),
                 actual_mean = mean(response_model),
                 pred_mean = mean(fit),
-                ae_groupwise = round(actual_mean/pred_mean,2),
-                ae = round(mean(ae),2))
+                ae_groupwise = round(actual_mean/pred_mean,2))
+                #ae = round(mean(ae),2))
   }else{
     dat_train$fit<-predict(model,newdata = dat_train, type = "response")
     data_type = "Test"
@@ -34,8 +34,8 @@ ae_analysis <- function(model = train_model_v1,
       summarise(total=n(),
                 actual_mean = mean(response),
                 pred_mean = mean(fit),
-                ae_groupwise = round(actual_mean/pred_mean,2),
-                ae = round(mean(ae),2))
+                ae_groupwise = round(actual_mean/pred_mean,2))
+                #ae = round(mean(ae),2))
     }
   
   
@@ -47,12 +47,12 @@ ae_analysis <- function(model = train_model_v1,
   print(table_f)
   if(!whole_ind){
     
-    p <- ggplot(dat_train_sum, aes(x=!!var, y=ae*scale, group=!!var)) +
+    p <- ggplot(dat_train_sum, aes(x=!!var, y=ae_groupwise*scale, group=!!var)) +
       geom_bar(mapping = aes(x = !!var, y = total), stat = "identity", fill = "tan1", colour="sienna3")+
       geom_hline(yintercept=scale, linetype="dashed", color = "red")+
       geom_point(size = 1, color = "blue") + 
       geom_line(size = 0.4, color = "blue") +
-      geom_text(aes(label=ae, x=!!var, y=ae*scale), colour="blue", vjust = 2)+
+      geom_text(aes(label=ae_groupwise, x=!!var, y=ae_groupwise*scale), colour="blue", vjust = 2)+
       geom_text(aes(label=total, x=!!var, y=total), colour="black", vjust = -1)+
       scale_y_continuous(name = "Total Number of Policies", 
                          sec.axis = sec_axis(~./scale, name = "A/E",
@@ -67,12 +67,12 @@ ae_analysis <- function(model = train_model_v1,
     print(p)
     
   }else{
-    p <- ggplot(dat_train_sum, aes(x=!!var, y=ae*scale, group=!!var)) +
+    p <- ggplot(dat_train_sum, aes(x=!!var, y=ae_groupwise*scale, group=!!var)) +
       geom_bar(mapping = aes(x = !!var, y = total), stat = "identity", fill = "tan1", colour="sienna3")+
       geom_hline(yintercept=scale, linetype="dashed", color = "red")+
       geom_point(size = 1, color = "blue") + 
       geom_line(size = 0.4, color = "blue") +
-      geom_text(aes(label=ae, x=!!var, y=ae*scale), colour="blue", vjust = 2)+
+      geom_text(aes(label=ae_groupwise, x=!!var, y=ae_groupwise*scale), colour="blue", vjust = 2)+
       geom_text(aes(label=total, x=!!var, y=total), colour="black", vjust = -1)+
       scale_y_continuous(name = "Total Number of Policies", 
                          sec.axis = sec_axis(~./scale, name = "A/E",
