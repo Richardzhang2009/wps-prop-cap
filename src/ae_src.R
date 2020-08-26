@@ -4,6 +4,7 @@ ae_analysis <- function(model = train_model_v1,
                         ymin=0,
                         ymax=17000,
                         var="industry",
+                        var_des = "",
                         train_ind = 1,
                         scale = 10000,
                         whole_ind = 0,
@@ -62,7 +63,7 @@ ae_analysis <- function(model = train_model_v1,
         axis.title.y = element_text(color = "black"),
         axis.title.y.right = element_text(color = "blue"),
         axis.text.x = element_text(angle=90)) +
-      xlab(var) +
+      xlab(var_des) +
       coord_cartesian(ylim = c(ymin,ymax)) 
     print(p)
     
@@ -82,7 +83,7 @@ ae_analysis <- function(model = train_model_v1,
         axis.title.y = element_text(color = "black"),
         axis.title.y.right = element_text(color = "blue"),
         axis.text.x = element_text(angle=90)) +
-      xlab(var)+
+      xlab(var_des)+
       coord_cartesian(ylim = c(ymin,ymax)) 
     print(p)
   }
