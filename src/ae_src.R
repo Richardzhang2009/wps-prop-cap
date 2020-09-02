@@ -9,6 +9,8 @@ ae_analysis <- function(model = train_model_v1,
                         scale = 10000,
                         whole_ind = 0,
                         sep_ind = 0,
+                        vjust_r = 2,
+                        vjust_m = -1,
                         ...){
   
   if(train_ind){
@@ -53,8 +55,8 @@ ae_analysis <- function(model = train_model_v1,
       geom_hline(yintercept=scale, linetype="dashed", color = "red")+
       geom_point(size = 1, color = "blue") + 
       geom_line(size = 0.4, color = "blue") +
-      geom_text(aes(label=ae_groupwise, x=!!var, y=ae_groupwise*scale), colour="blue", vjust = 2)+
-      geom_text(aes(label=total, x=!!var, y=total), colour="black", vjust = -1)+
+      geom_text(aes(label=ae_groupwise, x=!!var, y=ae_groupwise*scale), colour="blue", vjust = vjust_r)+
+      geom_text(aes(label=total, x=!!var, y=total), colour="black", vjust = vjust_m)+
       scale_y_continuous(name = "Total Number of Policies", 
                          sec.axis = sec_axis(~./scale, name = "A/E",
                                              labels = function(b) { paste0(round(b, 2), "")})) + 
@@ -73,8 +75,8 @@ ae_analysis <- function(model = train_model_v1,
       geom_hline(yintercept=scale, linetype="dashed", color = "red")+
       geom_point(size = 1, color = "blue") + 
       geom_line(size = 0.4, color = "blue") +
-      geom_text(aes(label=ae_groupwise, x=!!var, y=ae_groupwise*scale), colour="blue", vjust = 2)+
-      geom_text(aes(label=total, x=!!var, y=total), colour="black", vjust = -1)+
+      geom_text(aes(label=ae_groupwise, x=!!var, y=ae_groupwise*scale), colour="blue", vjust = vjust_r)+
+      geom_text(aes(label=total, x=!!var, y=total), colour="black", vjust = vjust_m)+
       scale_y_continuous(name = "Total Number of Policies", 
                          sec.axis = sec_axis(~./scale, name = "A/E",
                                              labels = function(b) { paste0(round(b, 2), "")})) + 
