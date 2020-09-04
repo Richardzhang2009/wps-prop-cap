@@ -1,8 +1,12 @@
 
-lift_chart<-function(dat=test, model = train_model_v2){
-  dat$fited_0 <- predict(model, newdata = test, type = "response")
+lift_chart<-function(dat=test, 
+                     model = train_model_v2,
+                     gp_des='ALL',
+                     num_group=5){
+  
+  dat$fited_0 <- predict(model, newdata = dat, type = "response")
   dat$predicted_gp <-  cut(dat$fited_0,
-                           breaks = quantile(dat$fited_0,probs = seq(0,1,0.1)),
+                           breaks = quantile(dat$fited_0,probs = seq(0,1,1/num_group)),
                            include.lowest = T)  
   tab <- dat %>%
     group_by(predicted_gp) %>%
@@ -30,13 +34,14 @@ lift_chart<-function(dat=test, model = train_model_v2){
     ) %>%
     knitr::kable(format = "html") %>%
     kableExtra::kable_styling(full_width = F) 
-  
-  g <- ggplot(tab1,aes(x = 1:10, y = lift)) + 
+  lift_l = min(tab1$lift)
+  lift_h = max(tab1$lift)
+  g <- ggplot(tab1,aes(x = 1:num_group, y = lift)) + 
     geom_point(size = 1, color = "blue") + 
     geom_line(size = 0.4, color = "blue") +
-    geom_text(aes(label=round(lift,2), x=1:10, y=lift), colour="blue", vjust = -1) +
-    expand_limits(y=c(1,1.75)) +
-    scale_x_continuous(breaks = seq(1, 10, 1)) +
+    geom_text(aes(label=round(lift,2), x=1:num_group, y=lift), colour="blue", vjust = -1) +
+    expand_limits(y=c(lift_l-0.1,lift_h+0.1)) +
+    scale_x_continuous(breaks = seq(1, num_group, 1)) +
     geom_hline(yintercept=1, linetype="dashed", color = "red")+
     geom_text(x=1.5, y=1, label=paste("Reference Line \n",1),color = "red") +
     theme(
@@ -45,6 +50,6 @@ lift_chart<-function(dat=test, model = train_model_v2){
       axis.text.x = element_text(angle=90)) +
     xlab("Prediction Decile") +
     ylab("Lift") +
-    ggtitle('Lift Chart (Test)')
+    ggtitle(paste('Lift Chart (tenure: ',gp_des,')',sep=''))
   return(list(tab = table, plot = g, acc_score = sum(tab1$lift_crt)))
 }
