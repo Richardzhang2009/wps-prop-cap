@@ -1,7 +1,11 @@
-ppv_summary <- function(dat = test, model = train_model_v2, gp_des=''){
+ppv_summary <- function(dat = test, 
+                        model = train_model_v2, 
+                        gp_des='',
+                        num_group=5,
+                        ref_pos=2){
   dat$fited_0 <- predict(model, newdata = dat, type = "response")
   dat$predicted_gp <-  cut(dat$fited_0,
-                            breaks = quantile(dat$fited_0,probs = seq(0,1,0.1)),
+                            breaks = quantile(dat$fited_0,probs = seq(0,1,1/num_group)),
                             include.lowest = T)  
 tab <- dat %>%
   group_by(predicted_gp) %>%
@@ -13,14 +17,14 @@ tab1 <- tab %>%
   kableExtra::kable_styling(full_width = F) 
 ylim_l=min(tab$actual)
 ylim_h=max(tab$actual)
-g<- ggplot(tab,aes(x = 10:1, y = actual)) + 
+g<- ggplot(tab,aes(x = num_group:1, y = actual)) + 
   geom_point(size = 1, color = "blue") + 
   geom_line(size = 0.4, color = "blue") +
-  geom_text(aes(label=actual, x=10:1, y=actual), colour="blue", vjust = -1) +
+  geom_text(aes(label=actual, x=num_group:1, y=actual), colour="blue", vjust = -1) +
   expand_limits(y=c(ylim_l,ylim_h+0.2)) +
-  scale_x_continuous(breaks = seq(1, 10, 1)) +
+  scale_x_continuous(breaks = seq(1, num_group, 1)) +
   geom_hline(yintercept=mean(dat$prop_r_curr), linetype="dashed", color = "red")+
-  geom_text(x=5, y=ylim_h+0.1, label=paste("Mean Prop Capture \n",round(mean(dat$prop_r_curr),3)),color = "red") +
+  geom_text(x=ref_pos, y=ylim_h+0.1, label=paste("Mean Prop Capture \n",round(mean(dat$prop_r_curr),3)),color = "red") +
   theme(
     axis.title.y = element_text(color = "black"),
     axis.title.y.right = element_text(color = "blue")) +
