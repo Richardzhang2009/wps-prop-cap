@@ -5,6 +5,7 @@ lift_chart<-function(dat=test,
                      num_group=5){
   
   dat$fited_0 <- predict(model, newdata = dat, type = "response")
+  group_break <- unique(quantile(dat$fited_0,probs = seq(0,1,1/num_group)))
   dat$predicted_gp <-  cut(dat$fited_0,
                            breaks = unique(quantile(dat$fited_0,probs = seq(0,1,1/num_group))),
                            include.lowest = T)  
@@ -36,12 +37,12 @@ lift_chart<-function(dat=test,
     kableExtra::kable_styling(full_width = F) 
   lift_l = min(tab1$lift)
   lift_h = max(tab1$lift)
-  g <- ggplot(tab1,aes(x = 1:num_group, y = lift)) + 
+  g <- ggplot(tab1,aes(x = 1:(length(group_break)-1), y = lift)) + 
     geom_point(size = 1, color = "blue") + 
     geom_line(size = 0.4, color = "blue") +
-    geom_text(aes(label=round(lift,2), x=1:num_group, y=lift), colour="blue", vjust = -1) +
+    geom_text(aes(label=round(lift,2), x=1:(length(group_break)-1), y=lift), colour="blue", vjust = -1) +
     expand_limits(y=c(lift_l-0.1,lift_h+0.1)) +
-    scale_x_continuous(breaks = seq(1, num_group, 1)) +
+    scale_x_continuous(breaks = seq(1, (length(group_break)-1), 1)) +
     geom_hline(yintercept=1, linetype="dashed", color = "red")+
     geom_text(x=1.5, y=1, label=paste("Reference Line \n",1),color = "red") +
     theme(
