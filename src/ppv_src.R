@@ -5,7 +5,7 @@ ppv_summary <- function(dat = test,
                         ref_pos=2){
   dat$fited_0 <- predict(model, newdata = dat, type = "response")
   dat$predicted_gp <-  cut(dat$fited_0,
-                            breaks = quantile(dat$fited_0,probs = seq(0,1,1/num_group)),
+                            breaks = unique(quantile(dat$fited_0,probs = seq(0,1,1/num_group))),
                             include.lowest = T)  
 tab <- dat %>%
   group_by(predicted_gp) %>%
