@@ -1,3 +1,4 @@
+
 ead_analysis <- function(dat = mydata_3,
                          response_var = "response_model",
                          var = "tenure_y",

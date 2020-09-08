@@ -1,4 +1,3 @@
-
 lift_chart <- function(dat = test,
                        model = train_model_v2,
                        gp_des = "ALL",
