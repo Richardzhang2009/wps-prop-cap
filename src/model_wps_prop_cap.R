@@ -509,8 +509,8 @@ data_recent_model_final$industry_v1 <- as.factor(data_recent_model_final$industr
 data_recent_model_final$industry <- as.factor(data_recent_model_final$industry)
 data_recent_model_final$key_account_v1 <- as.factor(data_recent_model_final$key_account_v1)
 
-save(data_recent_model_final, file = "./data/join_data.rda")
-
+# save(data_recent_model_final, file = "./data/join_data.rda")
+load(file = "./data/join_data.rda")
 #'
 #' # Data Split
 #'
